@@ -103,7 +103,10 @@ namespace HotelReservation
                 int price=0;
                 foreach (DateTime date in Dates(startDate, endDate))
                 {
-                    price += hotel.WeekdayRegular;
+                    if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+                        price += hotel.WeekendRegular;
+                    else
+                        price += hotel.WeekdayRegular;
                 }
                 prices.Add(price);
             }
