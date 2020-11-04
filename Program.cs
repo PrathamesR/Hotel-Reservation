@@ -11,12 +11,6 @@ namespace HotelReservation
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Hotel Reservation Problem");
-
-
-            HotelManager hotelManager = new HotelManager();
-            int prices = hotelManager.GetCheapest(new System.DateTime(2020, 9, 11), new System.DateTime(2020, 9, 12));
-
-            Console.Read();
         }
     }
 }
