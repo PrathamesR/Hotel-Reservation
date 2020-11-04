@@ -14,7 +14,7 @@ namespace HotelReservation
 
 
             HotelManager hotelManager = new HotelManager();
-            int prices = hotelManager.GetCheapest(new System.DateTime(2020, 9, 10), new System.DateTime(2020, 9, 11));
+            int prices = hotelManager.GetCheapest(new System.DateTime(2020, 9, 11), new System.DateTime(2020, 9, 12));
 
             Console.Read();
         }

@@ -9,6 +9,16 @@ namespace HotelReservation
 {
     public class HotelManager
     {
+        /// <summary>
+        /// Adds the new hotel to Database.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        /// <param name="rating">The rating.</param>
+        /// <param name="weekdayRegular">The weekday regular price.</param>
+        /// <param name="weekdayReward">The weekday reward price.</param>
+        /// <param name="weekendRegular">The weekend regular price.</param>
+        /// <param name="weekendReward">The weekend reward price.</param>
+        /// <returns></returns>
         public bool AddNewHotel(string location,int rating,int weekdayRegular, int weekdayReward,int weekendRegular, int weekendReward)
         {
             SqlConnection connection = new SqlConnection(@"Data Source='(LocalDB)\MSSQL Server';Initial Catalog=HotelReservation;Integrated Security=True");
@@ -42,6 +52,10 @@ namespace HotelReservation
 
         }
 
+        /// <summary>
+        /// Gets all hotels from DB.
+        /// </summary>
+        /// <returns></returns>
         List<Hotel> GetAllHotels()
         {
             string conn = @"Data Source='(LocalDB)\MSSQL Server';Initial Catalog=HotelReservation;Integrated Security=True";
@@ -85,6 +99,12 @@ namespace HotelReservation
             }
         }
 
+        /// <summary>
+        /// returns list of dates from Start Date to End Date.
+        /// </summary>
+        /// <param name="start">The start.</param>
+        /// <param name="end">The end.</param>
+        /// <returns></returns>
         List<DateTime> Dates(DateTime start, DateTime end)
         {
             List<DateTime> dates=new List<DateTime>();
@@ -93,27 +113,57 @@ namespace HotelReservation
             return dates;
         }
 
+        /// <summary>
+        /// Gets the cheapest Hotel on a date.
+        /// </summary>
+        /// <param name="hotels">The hotels.</param>
+        /// <param name="date">The date.</param>
+        /// <returns></returns>
+        int GetCheapestOnDate(List<Hotel> hotels,DateTime date)
+        {
+            int minPrice = int.MaxValue;
+            Hotel cheapestHotel = null;
+            foreach(Hotel hotel in hotels)
+            {
+                if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    if (minPrice > hotel.WeekendRegular)
+                    {
+                        minPrice = hotel.WeekendRegular;
+                        cheapestHotel = hotel;
+                    }
+                }
+                else
+                {
+                    if (minPrice > hotel.WeekdayRegular)
+                    {
+                        minPrice = hotel.WeekdayRegular;
+                        cheapestHotel = hotel;
+                    }
+                }
+            }
+            Console.Write(date.ToShortDateString()+": "+cheapestHotel.Location + ", ");
+            return minPrice;
+        }
+
+        /// <summary>
+        /// Gets the cheapest Bookings possible within given date range.
+        /// </summary>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <returns></returns>
         public int GetCheapest(DateTime startDate, DateTime endDate)
         {
             List<Hotel> hotels = GetAllHotels();
-            List<int> prices = new List<int>();
+            List<int> prices = new List<int>();            
 
-            foreach(Hotel hotel in hotels)
+            int price = 0;
+            foreach (DateTime date in Dates(startDate,endDate))
             {
-                int price=0;
-                foreach (DateTime date in Dates(startDate, endDate))
-                {
-                    if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
-                        price += hotel.WeekendRegular;
-                    else
-                        price += hotel.WeekdayRegular;
-                }
-                prices.Add(price);
+                price += GetCheapestOnDate(hotels,date);
             }
-
-            int cheapest = prices.IndexOf(prices.Min());
-            Console.WriteLine("Cheapest Hotel : " + hotels[cheapest].Location + " Price :$" + prices[cheapest]);
-            return prices[cheapest];
+            Console.WriteLine("Minimum Cost is " + price);
+            return price;
         }
 
 
