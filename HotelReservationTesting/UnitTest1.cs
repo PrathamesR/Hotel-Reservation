@@ -53,5 +53,17 @@ namespace HotelReservationTesting
 
             Assert.AreEqual(200, price);
         }
+
+        /// <summary>
+        /// Tests if cost of highest rated hotel.
+        /// </summary>
+        [TestMethod]
+        public void TestMethod5()
+        {
+            HotelManager hotelManager = new HotelManager();
+            int price = hotelManager.GetHighestRated(new System.DateTime(2020, 9, 11), new System.DateTime(2020, 9, 12));
+
+            Assert.AreEqual(370, price);
+        }
     }
 }

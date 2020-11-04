@@ -155,15 +155,15 @@ namespace HotelReservation
         public int GetCheapest(DateTime startDate, DateTime endDate)
         {
             List<Hotel> hotels = GetAllHotels();
-            List<int> prices = new List<int>();   
+            List<int> prices = new List<int>();
 
             int price;
-            foreach(Hotel hotel in hotels)
+            foreach (Hotel hotel in hotels)
             {
                 price = 0;
                 foreach (DateTime date in DatesInRange(startDate, endDate))
                 {
-                    if(date.DayOfWeek==DayOfWeek.Saturday || date.DayOfWeek==DayOfWeek.Sunday)
+                    if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
                         price += hotel.WeekendRegular;
                     else
                         price += hotel.WeekdayRegular;
@@ -172,16 +172,44 @@ namespace HotelReservation
             }
 
             int maxRating = 0;
-            Hotel best=null;
-            for (int i=0;i<prices.Count;i++)
+            Hotel best = null;
+            for (int i = 0; i < prices.Count; i++)
             {
                 if (prices[i] == prices.Min() && maxRating < hotels[i].Rating)
                     best = hotels[i];
             }
 
 
-            Console.WriteLine("Best Hotel is "+ best.Location+" Ratings "+best.Rating+" Minimum Cost is " + prices.Min());
+            Console.WriteLine("Best Hotel is " + best.Location + " Ratings " + best.Rating + " Minimum Cost is " + prices.Min());
             return prices.Min();
+        }
+
+        /// <summary>
+        /// Gets the highest rated Hotel.
+        /// </summary>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <returns></returns>
+        public int GetHighestRated(DateTime startDate, DateTime endDate)
+        {
+            List<Hotel> hotels = GetAllHotels();
+            Hotel best = new Hotel();
+            best.Rating = 0;
+            foreach(Hotel hotel in hotels)
+            {
+                if (hotel.Rating > best.Rating)
+                    best = hotel;
+            }
+
+            int total = 0;
+            foreach (DateTime date in DatesInRange(startDate, endDate))
+                if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+                    total += best.WeekendRegular;
+                else
+                    total += best.WeekdayRegular;
+
+            Console.WriteLine("Best Hotel is " + best.Location + " Ratings " + best.Rating + " Minimum Cost is " + total);
+            return total;
         }
 
 

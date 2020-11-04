@@ -13,7 +13,7 @@ namespace HotelReservation
             Console.WriteLine("Welcome to Hotel Reservation Problem");
 
             HotelManager hotelManager = new HotelManager();
-            int price = hotelManager.GetCheapest(new System.DateTime(2020, 9, 11), new System.DateTime(2020, 9, 12));
+            int price = hotelManager.GetHighestRated(new System.DateTime(2020, 9, 11), new System.DateTime(2020, 9, 12));
         }
     }
 }
