@@ -39,7 +39,19 @@ namespace HotelReservationTesting
             HotelManager hotelManager = new HotelManager();
             int price = hotelManager.GetCheapest(new System.DateTime(2020, 9, 11), new System.DateTime(2020, 9, 12));
 
-            Assert.AreEqual(170, price);
+            Assert.AreEqual(200, price);
+        }
+
+        /// <summary>
+        /// Tests if cheapest highest rated hotel is getting calculated on combination of weekdays and weekends.
+        /// </summary>
+        [TestMethod]
+        public void TestMethod4()
+        {
+            HotelManager hotelManager = new HotelManager();
+            int price = hotelManager.GetCheapest(new System.DateTime(2020, 9, 11), new System.DateTime(2020, 9, 12));
+
+            Assert.AreEqual(200, price);
         }
     }
 }

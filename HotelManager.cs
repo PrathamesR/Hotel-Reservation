@@ -105,7 +105,7 @@ namespace HotelReservation
         /// <param name="start">The start.</param>
         /// <param name="end">The end.</param>
         /// <returns></returns>
-        List<DateTime> Dates(DateTime start, DateTime end)
+        List<DateTime> DatesInRange(DateTime start, DateTime end)
         {
             List<DateTime> dates=new List<DateTime>();
             for (DateTime date = start.Date; date <= end.Date;date = date.AddDays(1))
@@ -155,15 +155,33 @@ namespace HotelReservation
         public int GetCheapest(DateTime startDate, DateTime endDate)
         {
             List<Hotel> hotels = GetAllHotels();
-            List<int> prices = new List<int>();            
+            List<int> prices = new List<int>();   
 
-            int price = 0;
-            foreach (DateTime date in Dates(startDate,endDate))
+            int price;
+            foreach(Hotel hotel in hotels)
             {
-                price += GetCheapestOnDate(hotels,date);
+                price = 0;
+                foreach (DateTime date in DatesInRange(startDate, endDate))
+                {
+                    if(date.DayOfWeek==DayOfWeek.Saturday || date.DayOfWeek==DayOfWeek.Sunday)
+                        price += hotel.WeekendRegular;
+                    else
+                        price += hotel.WeekdayRegular;
+                }
+                prices.Add(price);
             }
-            Console.WriteLine("Minimum Cost is " + price);
-            return price;
+
+            int maxRating = 0;
+            Hotel best=null;
+            for (int i=0;i<prices.Count;i++)
+            {
+                if (prices[i] == prices.Min() && maxRating < hotels[i].Rating)
+                    best = hotels[i];
+            }
+
+
+            Console.WriteLine("Best Hotel is "+ best.Location+" Minimum Cost is " + prices.Min());
+            return prices.Min();
         }
 
 

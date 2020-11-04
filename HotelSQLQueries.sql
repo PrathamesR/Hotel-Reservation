@@ -18,3 +18,5 @@ drop table Hotels;
 select * from HotelReservation.sys.tables;
 
 select * from Hotels;
+
+delete from Hotels where Rating=5;
