@@ -180,7 +180,7 @@ namespace HotelReservation
             }
 
 
-            Console.WriteLine("Best Hotel is "+ best.Location+" Minimum Cost is " + prices.Min());
+            Console.WriteLine("Best Hotel is "+ best.Location+" Ratings "+best.Rating+" Minimum Cost is " + prices.Min());
             return prices.Min();
         }
 
