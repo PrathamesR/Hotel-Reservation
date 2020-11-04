@@ -212,6 +212,36 @@ namespace HotelReservation
             return total;
         }
 
+        public int GetCheapestForReward(DateTime startDate, DateTime endDate)
+        {
+            List<Hotel> hotels = GetAllHotels();
+            List<int> prices = new List<int>();
 
+            int price;
+            foreach (Hotel hotel in hotels)
+            {
+                price = 0;
+                foreach (DateTime date in DatesInRange(startDate, endDate))
+                {
+                    if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+                        price += hotel.WeekendReward;
+                    else
+                        price += hotel.WeekdayReward;
+                }
+                prices.Add(price);
+            }
+
+            int maxRating = 0;
+            Hotel best = null;
+            for (int i = 0; i < prices.Count; i++)
+            {
+                if (prices[i] == prices.Min() && maxRating < hotels[i].Rating)
+                    best = hotels[i];
+            }
+
+
+            Console.WriteLine("Best Hotel is " + best.Location + " Ratings " + best.Rating + " Minimum Cost is " + prices.Min());
+            return prices.Min();
+        }
     }
 }
